@@ -1,1 +1,98 @@
+--1.1) Find department that has no employee.
+SELECT DEPTNAME
+FROM DEPARTMENT
+WHERE DEPTNO not in (SELECT WORKDEPT FROM EMPLOYEE);
+
+--1.2) Show name of employee who earns the most in this company
+SELECT e.FIRSTNME, e.LASTNAME, e.SALARY
+FROM EMPLOYEE as e
+WHERE SALARY >= all (SELECT SALARY FROM EMPLOYEE);
+
+SELECT e.FIRSTNME, e.LASTNAME, e.SALARY
+FROM EMPLOYEE as e
+WHERE SALARY >= (SELECT MAX(SALARY) FROM EMPLOYEE);
+
+SELECT e.FIRSTNME, e.LASTNAME, e.SALARY
+FROM EMPLOYEE as e
+WHERE SALARY = (SELECT MAX(SALARY) FROM EMPLOYEE);
+
+SELECT e1.FIRSTNME, e1.LASTNAME, e1.SALARY
+FROM EMPLOYEE as e1,
+     (SELECT max(SALARY) as m FROM EMPLOYEE) as e2
+WHERE e1.SALARY = e2.m;
+
+--2) Find employee who earns more than the salary of the manager of
+--the department whose name starts with "PLA";
+SELECT e.FIRSTNME, e.LASTNAME, e.SALARY, d.DEPTNAME
+FROM EMPLOYEE as e,
+     DEPARTMENT as d
+WHERE e.workdept = d.DEPTNO
+  and e.SALARY >= all (SELECT em.SALARY
+                       FROM EMPLOYEE as em,
+                            DEPARTMENT
+                       WHERE MGRNO = em.EMPNO
+                         and DEPTNAME LIKE 'PLA%');
+
+--3) Show employee who works on every project controlled by department C01;
+SELECT e.FIRSTNME, e.LASTNAME, PROJNAME
+FROM EMPLOYEE AS e,
+     EMPPROJACT as ac,
+     PROJECT as p
+WHERE NOT EXISTS((SELECT PROJNO FROM PROJECT WHERE DEPTNO = 'C01')
+                 EXCEPT
+                 (SELECT PROJNO FROM EMPPROJACT as act where act.EMPNO = e.EMPNO))
+  and e.EMPNO = ac.EMPNO
+  and ac.PROJNO = p.PROJNO;
+
+--4)Show name of employee who acts for the most number of projects
+--4 part1
+SELECT max(c)
+FROM (SELECT EMPNO, COUNT(distinct PROJNO) as c FROM EMPPROJACT group by EMPNO) as ec;
+--4 part2
+SELECT firstnme
+FROM (SELECT max(c) as mx
+      FROM (SELECT EMPNO, COUNT(distinct PROJNO) as c
+            FROM EMPPROJACT
+            GROUP BY EMPNO)) as ec,
+     (SELECT FIRSTNME, COUNT(distinct PROJNO) as c2
+      FROM EMPLOYEE as e,
+           EMPPROJACT
+      WHERE e.EMPNO = EMPPROJACT.EMPNO
+      group by e.EMPNO, FIRSTNME) as ec2
+where ec2.c2 = ec.mx;
+
+
+-- 5) Among employees who earns the most of each department
+SELECT FIRSTNME, LASTNAME, WORKDEPT, SALARY
+FROM EMPLOYEE
+WHERE (WORKDEPT, SALARY) IN
+      (SELECT WORKDEPT, MAX(SALARY)
+       FROM EMPLOYEE
+       GROUP BY WORKDEPT)
+  AND SALARY = (SELECT min(SALARY)
+                FROM (SELECT SALARY
+                      FROM EMPLOYEE
+                      WHERE (WORKDEPT, SALARY) IN
+                            (SELECT WORKDEPT, MAX(SALARY)
+                             FROM EMPLOYEE
+                             GROUP BY WORKDEPT)));
+
+CREATE VIEW minOfMaxSalary (departmentName, minOfMaxSalaryAmongDept, firstName, lastName)
+AS
+(
+SELECT FIRSTNME, LASTNAME, WORKDEPT, SALARY
+FROM EMPLOYEE
+WHERE (WORKDEPT, SALARY) IN
+      (SELECT WORKDEPT, MAX(SALARY)
+       FROM EMPLOYEE
+       GROUP BY WORKDEPT)
+  AND SALARY = (SELECT min(SALARY)
+                FROM (SELECT SALARY
+                      FROM EMPLOYEE
+                      WHERE (WORKDEPT, SALARY) IN
+                            (SELECT WORKDEPT, MAX(SALARY)
+                             FROM EMPLOYEE
+                             GROUP BY WORKDEPT)))
+    );
+
 
