@@ -1,3 +1,5 @@
+package Car;
+
 //Import here
 class Car {
     public static double accumulatedDist;

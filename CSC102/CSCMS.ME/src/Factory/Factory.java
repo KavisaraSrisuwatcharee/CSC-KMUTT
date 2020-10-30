@@ -1,3 +1,5 @@
+package Factory;
+
 class Factory {
     private double iron;
     private double copper;
