@@ -1,13 +1,15 @@
 package com.company;
 
 import weka.classifiers.Classifier;
-import weka.classifiers.evaluation.Evaluation;
+import weka.classifiers.Evaluation;
 import weka.classifiers.functions.Logistic;
+import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.ArffLoader;
 
 import java.io.File;
 import java.io.IOException;
+
 
 public class LoanML {
     Classifier classifier;
@@ -39,19 +41,33 @@ public class LoanML {
 //    }
     public void trainAndTestDataSet(){
         try {
-            Instances trainDataSet = getData(trainFile, classAttribute);
-            Instances testDataset = getData(testFile, classAttribute);
+            Instances trainingDataSet = getData(trainFile, classAttribute);
             classifier = new Logistic();
-            classifier.buildClassifier(trainDataSet);
+            classifier.buildClassifier(trainingDataSet);
             System.out.println(classifier);
-            Instances testingDataSet=getData(testFile,classAttribute);
-            Evaluation eval = new Evaluation(trainDataSet);
-            eval.evaluateModel(classifier, testDataset);
-//            System.out.println("Logistic Evaluation");
-            System.out.println(eval.toSummaryString());
+
+            Instances testingDataSet = getData(testFile, classAttribute);
+            Evaluation eval = new Evaluation(trainingDataSet);
+            eval.evaluateModel(classifier, testingDataSet);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+    }
+    public void predictDataSet() throws Exception {
+        System.out.println("Predict the output");
+        Instance predictData;
+        double answer = 0;
+        Instances predictDataSets = getData(predictFile, classAttribute);
+        for(int i=0; i<predictDataSets.numInstances(); i++){
+            predictData = predictDataSets.instance(i);
+            try {
+                answer = classifier.classifyInstance(predictData);
+                System.out.println(answer);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
     }
 }

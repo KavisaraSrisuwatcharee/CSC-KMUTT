@@ -2,7 +2,7 @@ package com.company;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 	    String trainingFile;
 	    String testingFile;
 	    String PredictFile;
@@ -12,5 +12,6 @@ public class Main {
 	    PredictFile="predict.arff";
 	    LoanML loan=new LoanML(9,trainingFile,testingFile,PredictFile);
 	    loan.trainAndTestDataSet();
+	    loan.predictDataSet();
     }
 }
