@@ -4,7 +4,7 @@ public class Sudoku {
 
     public static void main(String[] args) {
         int[][] board =
-                {{7, 0, 0, 5, 8, 3, 0, 0, 6},
+                        {{7, 0, 0, 5, 8, 3, 0, 0, 6},
                         {0, 0, 6, 0, 0, 1, 4, 0, 5},
                         {0, 5, 2, 0, 0, 6, 0, 8, 3},
                         {3, 0, 0, 2, 0, 0, 9, 5, 8},
