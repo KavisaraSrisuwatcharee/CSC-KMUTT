@@ -119,28 +119,28 @@ public class GCD {
 
     //trying
     public static void main(String [] args){
-//        System.out.println(GCD(6,10));
+        System.out.println(GCD(6,10));
         System.out.println(RecursiveGCD(5,15));
     }
-    public static int GCD(int x,int y){
-        int temp=1;
-        if(x>y){
-            for(int i=2;i<=y;i++){
-                if(x%i==0 && y%i==0){
-                    temp=i;
-                }
-
-            }
-        }else if (x<y){
-            for(int i=2;i<=x;i++){
-                if(x%i==0 && y%i==0){
-                    temp=i;
-                }
-
-            }
-        }
-        return temp;
-    }
+//    public static int GCD(int x,int y){
+//        int temp=1;
+//        if(x>y){
+//            for(int i=2;i<=y;i++){
+//                if(x%i==0 && y%i==0){
+//                    temp=i;
+//                }
+//
+//            }
+//        }else if (x<y){
+//            for(int i=2;i<=x;i++){
+//                if(x%i==0 && y%i==0){
+//                    temp=i;
+//                }
+//
+//            }
+//        }
+//        return temp;
+//    }
     public static int RecursiveGCD(int x, int y){
 //        int r=Math.min(x,y);
 //        if(r==0){
@@ -153,5 +153,14 @@ public class GCD {
         }
             return RecursiveGCD(Math.max(x,y),Math.max(x,y)%Math.min(x,y));
 
+    }
+    public static int GCD(int x,int y){
+        int temp=1;
+        for(int i=1;i<Math.min(x,y);i++){
+            if(x%i==0 && y%i==0){
+                temp=i;
+            }
+        }
+        return temp;
     }
 }
