@@ -56,7 +56,7 @@ class _HomePageState extends State<HomePage> {
                       color: Colors.amber,
                       onPressed: () {
                         var value = textController.text;
-                        if (value.isEmpty) {
+                        if (!value.isEmpty) {
                           if (value == 'text01') {
                             Navigator.push(
                                 context,
@@ -107,7 +107,8 @@ class Page01 extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Saweedee ka Jarn Toei'),
+            Text('Text01'),
+            Text('Sawaddee ka Jarn Toei'),
             RaisedButton(
                 onPressed: () {
                   Navigator.of(context).pop();
@@ -136,7 +137,8 @@ class Page02 extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Saweedee ka Jarn Toei'),
+            Text('Text02'),
+            Text('Sawaddee ka Jarn Toei'),
             RaisedButton(
                 onPressed: () {
                   Navigator.of(context).pop();
@@ -166,6 +168,7 @@ class UnknownPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text('Mai mee information'),
+            Text('404 page not found'),
             RaisedButton(
                 onPressed: () {
                   Navigator.of(context).pop();
